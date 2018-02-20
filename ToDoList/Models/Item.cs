@@ -107,7 +107,8 @@ namespace ToDoList.Models
 
      var cmd = conn.CreateCommand() as MySqlCommand;
     //  cmd.CommandText = @"INSERT INTO `items` (`description`) VALUES (@ItemDescription);";
-    cmd.CommandText = @"INSERT INTO `items` (`description', 'dueDate`) VALUES (@ItemDescription, @ItemDueDate);";
+    // names in parentheses must match column names in database exactly
+    cmd.CommandText = @"INSERT INTO `items` (description, duedate) VALUES (@ItemDescription, @ItemDueDate);";
 
      MySqlParameter description = new MySqlParameter();
      description.ParameterName = "@ItemDescription";

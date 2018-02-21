@@ -18,7 +18,7 @@ namespace ToDoList.Controllers
         [HttpGet("/items/new")]
         public ActionResult CreateForm()
         {
-            return View();
+          return View();
         }
 
         [HttpPost("/items")]
@@ -36,8 +36,8 @@ namespace ToDoList.Controllers
         [HttpPost("/items/delete")]
         public ActionResult DeleteAll()
         {
-            Item.DeleteAll();
-            return View();
+          Item.DeleteAll();
+          return View();
         }
 
         [HttpPost("/items/duedatesort")]

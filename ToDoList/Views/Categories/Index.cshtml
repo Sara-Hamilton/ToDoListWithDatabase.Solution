@@ -1,17 +1,9 @@
 <h1>To Do List</h1>
 
-@* <form action="/items/duedatesort" method="post">
-  <button type="submit" name="button">Sort By Due Date</button>
-</form>
-
-<form action="/items/idsort" method="post">
-  <button type="submit" name="button">Sort By Date Created</button>
-</form> *@
-
 <ul>
 @foreach(var category in Model)
 {
-  <li>@category.GetName()</li>
+  <li>@category.GetName() | <a href="/categories/@category.GetId()/update">Edit</a></li>
   }
 </ul>
 <p><a href="/categories/new">Add another category.</a></p>

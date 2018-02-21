@@ -89,10 +89,12 @@ namespace ToDoList.Tests
     [TestMethod]
     public void GetItems_RetrievesAllItemsWithCategory_ItemList()
     {
+      //Arrange
       Category testCategory = new Category("Household chores");
       testCategory.Save();
       DateTime newDueDate = new DateTime (2018, 3, 1);
 
+      //Act
       Item firstItem = new Item("Mow the lawn", newDueDate, testCategory.GetId());
       firstItem.Save();
       Item secondItem = new Item("Do the dishes", newDueDate, testCategory.GetId());
@@ -100,7 +102,8 @@ namespace ToDoList.Tests
 
       List<Item> testItemList = new List<Item> {firstItem, secondItem};
       List<Item> resultItemList = testCategory.GetItems();
-
+      
+      //Assert
       CollectionAssert.AreEqual(testItemList, resultItemList);
     }
   }

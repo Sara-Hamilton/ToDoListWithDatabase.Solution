@@ -129,7 +129,7 @@ namespace ToDoList.Models
       conn.Close();
       if (conn != null)
       {
-          conn.Dispose();
+        conn.Dispose();
       }
     }
 
@@ -187,7 +187,7 @@ namespace ToDoList.Models
       conn.Close();
       if (conn != null)
       {
-          conn.Dispose();
+        conn.Dispose();
       }
     }
 

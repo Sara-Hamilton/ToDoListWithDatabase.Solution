@@ -12,6 +12,13 @@ namespace ToDoList.Controllers
         public ActionResult Index()
         {
           List<Item> allItems = Item.GetAll();
+
+          // List<Category> allCategories = Category.GetAll();
+          // Dictionary<string, object> model = new Dictionary<string, object>();
+          // model.Add("items", allItems);
+          // model.Add("categories", allCategories);
+          // return View("Index", model);
+
           return View(allItems);
         }
 
@@ -28,12 +35,15 @@ namespace ToDoList.Controllers
         {
           string newDueDate = Request.Form["new-duedate"];
           DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
-          // added 1 for required category parameter - how is this supposed to be assigned?
           Item newItem = new Item (Request.Form["new-description"], parsedDueDate, Int32.Parse(Request.Form["new-category"]));
           newItem.Save();
           List<Item> allItems = Item.GetAll();
+
           // List<Category> allCategories = Category.GetAll();
-          // Dictionary<Item, Category> dict =
+          // Dictionary<string, object> model = new Dictionary<string, object>();
+          // model.Add("items", allItems);
+          // model.Add("categories", allCategories);
+          // return View("Index", model);
           return View("Index", allItems);
         }
 
@@ -68,10 +78,8 @@ namespace ToDoList.Controllers
           List<Category> allCategories = Category.GetAll();
           Dictionary<string, object> taskDetails = new Dictionary <string, object>();
           taskDetails.Add("item", thisItem);
-          // taskDetails.Add("category", thisCategory);
           taskDetails.Add("categories", allCategories);
 
-          // return View(thisItem);
           return View(taskDetails);
         }
 

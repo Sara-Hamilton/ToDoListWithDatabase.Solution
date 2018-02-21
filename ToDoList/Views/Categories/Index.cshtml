@@ -3,7 +3,7 @@
 <ul>
 @foreach(var category in Model)
 {
-  <li>@category.GetName() | <a href="/categories/@category.GetId()/update">Edit</a></li>
+  <li>@category.GetName() | <a href="/categories/@category.GetId()/view">View all tasks in this category</a> | <a href="/categories/@category.GetId()/update">Edit category</a></li>
   }
 </ul>
 <p><a href="/categories/new">Add another category.</a></p>

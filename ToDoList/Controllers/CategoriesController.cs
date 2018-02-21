@@ -52,5 +52,13 @@ namespace ToDoList.Controllers
         return RedirectToAction("Index");
       }
 
+      [HttpGet("/categories/{id}/view")]
+      public ActionResult ViewItems(int id)
+      {
+        Category thisCategory = Category.Find(id);
+        List<Item> allCategoryItems = thisCategory.GetItems();
+        return View(allCategoryItems);
+      }
+
     }
 }

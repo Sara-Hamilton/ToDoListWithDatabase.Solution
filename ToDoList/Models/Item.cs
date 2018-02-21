@@ -84,8 +84,8 @@ namespace ToDoList.Models
     }
 
     public static void DeleteAll()
-   {
-     MySqlConnection conn = DB.Connection();
+    {
+    MySqlConnection conn = DB.Connection();
      conn.Open();
 
      var cmd = conn.CreateCommand() as MySqlCommand;
@@ -96,7 +96,7 @@ namespace ToDoList.Models
      conn.Close();
      if (conn != null)
      {
-       conn.Dispose();
+      conn.Dispose();
      }
     }
 
@@ -131,7 +131,7 @@ namespace ToDoList.Models
     }
 
     public static Item Find(int id)
-   {
+    {
      MySqlConnection conn = DB.Connection();
      conn.Open();
 
@@ -156,7 +156,7 @@ namespace ToDoList.Models
        itemDueDate = rdr.GetDateTime(2);
      }
 
-     Item foundItem= new Item(itemDescription,  itemDueDate, itemId);
+     Item foundItem= new Item(itemDescription, itemDueDate, itemId);
 
       conn.Close();
       if (conn != null)
@@ -165,6 +165,99 @@ namespace ToDoList.Models
       }
 
      return foundItem;
-   }
+    }
+
+    // this method generates the following error: NotSupportedException: Parameter type MySqlParameter (DbType: String) not currently supported. Value: MySql.Data.MySqlClient.MySqlParameter
+    // public static List<Item> SortByDueDate()
+    // {
+    //   List<Item> sortedItems = new List<Item>{};
+    //   MySqlConnection conn = DB.Connection();
+    //   conn.Open();
+    //   MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+    //   cmd.CommandText = @"SELECT * FROM items ORDER BY (@ItemDueDate) ACS;";
+    //
+    //   //unsure about this
+    //   // MySqlParameter thisDuedate = new MySqlParameter();
+    //   // thisDuedate.ParameterName = "@thisDuedate";
+    //   // thisDuedate.Value = dueDate;
+    //   // cmd.Parameters.Add(thisDuedate);
+    //
+    //   MySqlParameter dueDate = new MySqlParameter();
+    //   dueDate.ParameterName = "@ItemDueDate";
+    //   // the following line is probably incorrect
+    //   dueDate.Value = dueDate;
+    //   Console.WriteLine(dueDate);
+    //   cmd.Parameters.Add(dueDate);
+    //
+    //   MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+    //   while (rdr.Read())
+    //   {
+    //     int itemId = rdr.GetInt32(0);
+    //     string itemDescription = rdr.GetString(1);
+    //     DateTime itemDueDate = rdr.GetDateTime(2);
+    //
+    //     Item newItem = new Item(itemDescription, itemDueDate, itemId);
+    //
+    //     sortedItems.Add(newItem);
+    //   }
+    //   conn.Close();
+    //   if (conn != null)
+    //   {
+    //     conn.Dispose();
+    //   }
+    //   return sortedItems;
+    // }
+
+    public static List<Item> SortByDueDate()
+    {
+      List<Item> sortedItems = new List<Item>{};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM items ORDER BY (duedate) ASC;";
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while (rdr.Read())
+      {
+        int itemId = rdr.GetInt32(0);
+        string itemDescription = rdr.GetString(1);
+        DateTime itemDueDate = rdr.GetDateTime(2);
+
+        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+
+        sortedItems.Add(newItem);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return sortedItems;
+    }
+
+    public static List<Item> SortById()
+    {
+      List<Item> sortedItems = new List<Item>{};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM items ORDER BY (id) ASC;";
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while (rdr.Read())
+      {
+        int itemId = rdr.GetInt32(0);
+        string itemDescription = rdr.GetString(1);
+        DateTime itemDueDate = rdr.GetDateTime(2);
+
+        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+
+        sortedItems.Add(newItem);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return sortedItems;
+    }
   }
 }

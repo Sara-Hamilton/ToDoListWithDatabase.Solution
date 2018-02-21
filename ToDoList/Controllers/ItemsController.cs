@@ -39,5 +39,21 @@ namespace ToDoList.Controllers
             return View();
         }
 
+        [HttpPost("/items/duedatesort")]
+        public ActionResult SortByDueDate()
+        {
+          List<Item> allItems = Item.GetAll();
+          allItems = Item.SortByDueDate();
+          return View("Index", allItems);
+        }
+
+        [HttpPost("/items/idsort")]
+        public ActionResult SortById()
+        {
+          List<Item> allItems = Item.GetAll();
+          allItems = Item.SortById();
+          return View("Index", allItems);
+        }
+
     }
 }

@@ -34,6 +34,11 @@ namespace ToDoList.Models
       }
     }
 
+    public override int GetHashCode()
+    {
+      return this.GetDescription().GetHashCode();
+    }
+
     public int GetId()
     {
       return _id;
@@ -259,5 +264,60 @@ namespace ToDoList.Models
       }
       return sortedItems;
     }
+
+    public void Edit (string newDescription, DateTime newDuedate)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"UPDATE items SET description = @newDescription, duedate = @newDuedate WHERE id = @searchId;";
+
+      MySqlParameter searchId = new MySqlParameter();
+      searchId.ParameterName = "@searchId";
+      searchId.Value = _id;
+      cmd.Parameters.Add(searchId);
+
+      MySqlParameter description = new MySqlParameter();
+      description.ParameterName = "@newDescription";
+      description.Value = newDescription;
+      cmd.Parameters.Add(description);
+
+      MySqlParameter duedate = new MySqlParameter();
+      duedate.ParameterName = "@newDuedate";
+      duedate.Value = newDuedate;
+      cmd.Parameters.Add(duedate);
+
+      cmd.ExecuteNonQuery();
+      _description = newDescription;
+      _dueDate = newDuedate;
+
+      conn.Close();
+      if (conn != null)
+      {
+          conn.Dispose();
+      }
+    }
+
+    public void Delete (int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM items WHERE id = @thisId;";
+
+      MySqlParameter thisId = new MySqlParameter();
+      thisId.ParameterName = "@thisId";
+      thisId.Value = id;
+      cmd.Parameters.Add(thisId);
+
+      cmd.ExecuteNonQuery();
+
+      conn.Close();
+      if (conn != null)
+      {
+          conn.Dispose();
+      }
+    }
+
   }
 }

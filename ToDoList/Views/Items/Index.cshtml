@@ -11,7 +11,7 @@
 <ul>
 @foreach(var item in Model)
 {
-  <li>Task: @item.GetDescription() Due date: @item.GetDueDate().ToShortDateString()</li>
+  <li>Task: @item.GetDescription()  | <a href="/items/@item.GetId()/update">Edit</a> Due date: @item.GetDueDate().ToShortDateString()</li>
   }
 </ul>
 <p><a href="/items/new">Add another item.</a></p>

@@ -55,5 +55,22 @@ namespace ToDoList.Controllers
           return View("Index", allItems);
         }
 
+        [HttpGet("/items/{id}/update")]
+        public ActionResult UpdateForm(int id)
+        {
+          Item thisItem = Item.Find(id);
+          return View(thisItem);
+        }
+
+        [HttpPost("/items/{id}/update")]
+        public ActionResult Update(int id)
+        {
+          Item thisItem = Item.Find(id);
+          string newDueDate = Request.Form["newduedate"];
+          DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
+          thisItem.Edit(Request.Form["newname"], parsedDueDate);
+          return RedirectToAction("Index");
+        }
+
     }
 }

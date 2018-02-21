@@ -2,6 +2,15 @@
 <form action="/items" method="post">
   <label for="new-description">Item description:</label>
   <input id="new-description" name="new-description" type="text">
+
+  <label for="new-category">Category:</label>
+  <select name="new-category">
+    @foreach(var category in Model)
+    {
+      <option value=@category.GetId()>@category.GetName()</option>
+      }
+  </select>
+
   <label for="new-duedate">Item Due Date:</label>
   <input id="new-duedate" name="new-duedate" type="date">
   <button type="submit">Submit</button>

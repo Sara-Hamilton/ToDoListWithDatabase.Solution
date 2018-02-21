@@ -18,7 +18,9 @@ namespace ToDoList.Controllers
         [HttpGet("/items/new")]
         public ActionResult CreateForm()
         {
-          return View();
+          List<Category> allCategories = Category.GetAll();
+          return View(allCategories);
+          // return View();
         }
 
         [HttpPost("/items")]
@@ -27,9 +29,11 @@ namespace ToDoList.Controllers
           string newDueDate = Request.Form["new-duedate"];
           DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
           // added 1 for required category parameter - how is this supposed to be assigned?
-          Item newItem = new Item (Request.Form["new-description"], parsedDueDate, 1);
+          Item newItem = new Item (Request.Form["new-description"], parsedDueDate, Int32.Parse(Request.Form["new-category"]));
           newItem.Save();
           List<Item> allItems = Item.GetAll();
+          // List<Category> allCategories = Category.GetAll();
+          // Dictionary<Item, Category> dict =
           return View("Index", allItems);
         }
 
@@ -60,7 +64,15 @@ namespace ToDoList.Controllers
         public ActionResult UpdateForm(int id)
         {
           Item thisItem = Item.Find(id);
-          return View(thisItem);
+          Category thisCategory = Category.Find(thisItem.GetCategoryId());
+          List<Category> allCategories = Category.GetAll();
+          Dictionary<string, object> taskDetails = new Dictionary <string, object>();
+          taskDetails.Add("item", thisItem);
+          // taskDetails.Add("category", thisCategory);
+          taskDetails.Add("categories", allCategories);
+
+          // return View(thisItem);
+          return View(taskDetails);
         }
 
         [HttpPost("/items/{id}/update")]
@@ -69,7 +81,7 @@ namespace ToDoList.Controllers
           Item thisItem = Item.Find(id);
           string newDueDate = Request.Form["newduedate"];
           DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
-          thisItem.Edit(Request.Form["newname"], parsedDueDate);
+          thisItem.Edit(Request.Form["newname"], parsedDueDate,  Int32.Parse(Request.Form["newcategoryId"]));
           return RedirectToAction("Index");
         }
 

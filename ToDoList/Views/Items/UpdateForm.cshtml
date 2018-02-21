@@ -1,11 +1,20 @@
 <h1>To Do List</h1>
 <hr />
-<h2>Edit category: @Model.GetDescription()</h2>
-<form action="/items/@Model.GetId()/update" method="post">
+<h2>Edit Task: @Model["item"].GetDescription()</h2>
+<form action="/items/@Model["item"].GetId()/update" method="post">
     <label for="name">Name:</label>
-    <input type="text" name="newname" value="@Model.GetDescription()">
+    <input type="text" name="newname" value="@Model["item"].GetDescription()">
+
+    <label for="newcategoryId">Category:</label>
+    <select name="newcategoryId">
+      @foreach(var category in @Model["categories"])
+      {
+        <option value=@category.GetId()>@category.GetName()</option>
+        }
+    </select>
+
     <label for="duedate">Due Date:</label>
-    <input type="date" name="newduedate" value="@Model.GetDueDate()">
+    <input type="date" name="newduedate" value="@Model["item"].GetDueDate()">
     <button type="submit">Edit</button>
 </form>
 <h4><a href="/items">Return home</a></h4>

@@ -10,12 +10,14 @@ namespace ToDoList.Models
     private int _id;
     private string _description;
     private DateTime _dueDate;
+    private int _categoryId;
 
-    public Item(string Description, DateTime DueDate, int Id = 0)
+    public Item(string Description, DateTime DueDate, int categoryId, int Id = 0)
     {
       _id = Id;
       _description = Description;
       _dueDate = DueDate;
+      _categoryId = categoryId;
     }
 
     public override bool Equals(System.Object otherItem)
@@ -30,7 +32,8 @@ namespace ToDoList.Models
         bool idEquality = (this.GetId() == newItem.GetId());
         bool descriptionEquality = (this.GetDescription() == newItem.GetDescription());
         bool dueDateEquality = (this.GetDueDate() == newItem.GetDueDate());
-        return (idEquality && descriptionEquality && dueDateEquality);
+        bool categoryEquality = this.GetCategoryId() == newItem.GetCategoryId();
+        return (idEquality && descriptionEquality && dueDateEquality && categoryEquality);
       }
     }
 
@@ -43,10 +46,6 @@ namespace ToDoList.Models
     {
       return _id;
     }
-    public void SetId(int newId)
-    {
-      _id = newId;
-    }
     public string GetDescription()
     {
       return _description;
@@ -54,6 +53,10 @@ namespace ToDoList.Models
     public void SetDescription(string newDescription)
     {
       _description = newDescription;
+    }
+    public int GetCategoryId()
+    {
+      return _categoryId;
     }
     public DateTime GetDueDate()
     {
@@ -77,7 +80,8 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
-        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+        int itemCategoryId = rdr.GetInt32(3);
+        Item newItem = new Item(itemDescription, itemDueDate, itemCategoryId, itemId);
         allItems.Add(newItem);
       }
       conn.Close();
@@ -113,7 +117,7 @@ namespace ToDoList.Models
      var cmd = conn.CreateCommand() as MySqlCommand;
     //  cmd.CommandText = @"INSERT INTO `items` (`description`) VALUES (@ItemDescription);";
     // names in parentheses must match column names in database exactly
-    cmd.CommandText = @"INSERT INTO `items` (description, duedate) VALUES (@ItemDescription, @ItemDueDate);";
+    cmd.CommandText = @"INSERT INTO `items` (description, duedate, category_id) VALUES (@ItemDescription, @ItemDueDate, @ItemCategoryId);";
 
      MySqlParameter description = new MySqlParameter();
      description.ParameterName = "@ItemDescription";
@@ -124,6 +128,11 @@ namespace ToDoList.Models
      dueDate.ParameterName = "@ItemDueDate";
      dueDate.Value = this._dueDate;
      cmd.Parameters.Add(dueDate);
+
+     MySqlParameter categoryId = new MySqlParameter();
+     categoryId.ParameterName = "@ItemCategoryId";
+     categoryId.Value = this._categoryId;
+     cmd.Parameters.Add(categoryId);
 
      cmd.ExecuteNonQuery();
      _id = (int) cmd.LastInsertedId;
@@ -153,15 +162,17 @@ namespace ToDoList.Models
      int itemId = 0;
      string itemDescription = "";
      DateTime itemDueDate = DateTime.Now;
+     int itemCategoryId = 0;
 
      while (rdr.Read())
      {
        itemId = rdr.GetInt32(0);
        itemDescription = rdr.GetString(1);
        itemDueDate = rdr.GetDateTime(2);
+       itemCategoryId = rdr.GetInt32(3);
      }
 
-     Item foundItem= new Item(itemDescription, itemDueDate, itemId);
+     Item foundItem= new Item(itemDescription, itemDueDate, itemCategoryId, itemId);
 
       conn.Close();
       if (conn != null)

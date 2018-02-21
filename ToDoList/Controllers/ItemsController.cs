@@ -26,7 +26,7 @@ namespace ToDoList.Controllers
         {
           string newDueDate = Request.Form["new-duedate"];
           DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
-          Item newItem = new Item (Request.Form["new-description"], parsedDueDate);
+          Item newItem = new Item (Request.Form["new-description"], parsedDueDate, 1);
           newItem.Save();
           List<Item> allItems = Item.GetAll();
           return View("Index", allItems);

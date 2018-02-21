@@ -11,7 +11,9 @@ namespace ToDoList.Tests
     public void Dispose()
     {
       Item.DeleteAll();
+      // Category.DeleteAll();
     }
+
     public void ItemTests()
     {
       DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
@@ -33,7 +35,7 @@ namespace ToDoList.Tests
       //Arrange
       string description = "Walk the dog.";
       DateTime dueDate = new DateTime (2018, 3, 1);
-      Item newItem = new Item(description, dueDate);
+      Item newItem = new Item(description, dueDate, 1);
 
       //Act
       string result = newItem.GetDescription();
@@ -47,7 +49,7 @@ namespace ToDoList.Tests
     {
       //Arrange
       DateTime newDueDate = new DateTime (2018, 3, 1);
-      Item newItem = new Item("Do Task", newDueDate);
+      Item newItem = new Item("Do Task", newDueDate, 1);
 
       //Act
       DateTime result = newItem.GetDueDate();
@@ -64,8 +66,8 @@ namespace ToDoList.Tests
       DateTime dueDate01 = new DateTime (2018, 3, 1);
       string description02 = "Wash the dishes";
       DateTime dueDate02 = new DateTime (2018, 4, 1);
-      Item newItem1 = new Item(description01, dueDate01);
-      Item newItem2 = new Item(description02, dueDate02);
+      Item newItem1 = new Item(description01, dueDate01, 1);
+      Item newItem2 = new Item(description02, dueDate02, 2);
       List<Item> newList = new List<Item> { newItem1, newItem2 };
 
       //Act
@@ -86,7 +88,7 @@ namespace ToDoList.Tests
     {
       //Arrange
       DateTime dueDate = new DateTime (2018, 3, 1);
-      Item testItem = new Item("Mow the lawn", dueDate);
+      Item testItem = new Item("Mow the lawn", dueDate, 1);
 
       //Act
       testItem.Save();
@@ -102,10 +104,10 @@ namespace ToDoList.Tests
     {
       //Arrange
       DateTime dueDate = new DateTime (2018, 3, 1);
-      Item testItem = new Item("Mow the lawn", dueDate);
+      Item testItem = new Item("Mow the lawn", dueDate, 1);
+      testItem.Save();
 
       //Act
-      testItem.Save();
       Item savedItem = Item.GetAll()[0];
 
       int result = savedItem.GetId();
@@ -120,9 +122,9 @@ namespace ToDoList.Tests
     {
       // Arrange, Act
       DateTime firstDueDate = new DateTime (2018, 3, 1);
-      Item firstItem = new Item("Mow the lawn", firstDueDate);
+      Item firstItem = new Item("Mow the lawn", firstDueDate, 1);
       DateTime secondDueDate = new DateTime (2018, 3, 1);
-      Item secondItem = new Item("Mow the lawn", secondDueDate);
+      Item secondItem = new Item("Mow the lawn", secondDueDate, 1);
 
       // Assert
       Assert.AreEqual(firstItem, secondItem);
@@ -133,7 +135,7 @@ namespace ToDoList.Tests
     {
       //Arrange
       DateTime newDueDate = new DateTime (2018, 3, 1);
-      Item testItem = new Item("Mow the lawn", newDueDate);
+      Item testItem = new Item("Mow the lawn", newDueDate, 1);
       testItem.Save();
 
       //Act
@@ -152,9 +154,10 @@ namespace ToDoList.Tests
       Item testItem = new Item(firstDescription, newDueDate, 1);
       testItem.Save();
       string secondDescription = "Mow the lawn";
+      DateTime secondDueDate = new DateTime (2018, 4, 1);
 
       //Act
-      testItem.Edit(secondDescription);
+      testItem.Edit(secondDescription, secondDueDate);
 
       string result = Item.Find(testItem.GetId()).GetDescription();
 

@@ -135,17 +135,13 @@ namespace ToDoList.Models
     }
 
     // I added this method outside of the tutorial
+    // It doesn't work yet
     public static void DeleteOne(int id)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"DELETE FROM categories, items USING categories LEFT JOIN items on ((@searchId) = items.category_id);";
-
-      MySqlParameter searchId = new MySqlParameter();
-      searchId.ParameterName = "@searchId";
-      searchId.Value = id;
-      cmd.Parameters.Add(searchId);
+      cmd.CommandText = @"DELETE FROM categories, items USING categories LEFT JOIN items on (categories.id = items.category_id) WHERE categories.id = id;";
 
       cmd.ExecuteNonQuery();
       conn.Close();

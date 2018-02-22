@@ -134,16 +134,22 @@ namespace ToDoList.Models
       }
     }
 
-    public void Delete(int idToDelete)
+    public void Delete()
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
       cmd.CommandText = @"DELETE FROM categories WHERE id = @category_id; DELETE FROM items WHERE category_id = @category_id;";
 
+      // The following code is needed if id is fed in as a parameter named idToDelete
+      // MySqlParameter categoryId = new MySqlParameter();
+      // categoryId.ParameterName = "@category_id";
+      // categoryId.Value = idToDelete;
+      // cmd.Parameters.Add(categoryId);
+
       MySqlParameter categoryId = new MySqlParameter();
       categoryId.ParameterName = "@category_id";
-      categoryId.Value = idToDelete;
+      categoryId.Value = this._id;
       cmd.Parameters.Add(categoryId);
 
       cmd.ExecuteNonQuery();

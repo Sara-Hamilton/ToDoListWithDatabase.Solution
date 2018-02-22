@@ -134,7 +134,7 @@ namespace ToDoList.Tests
       //Act
       int id = testCategory1.GetId();
       System.Console.WriteLine("id " +id);
-      testCategory1.Delete(id);
+      testCategory1.Delete();
 
       int result = Category.GetAll().Count;
 

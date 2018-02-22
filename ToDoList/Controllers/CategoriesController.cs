@@ -57,7 +57,7 @@ namespace ToDoList.Controllers
       public ActionResult Delete(int id)
       {
         Category thisCategory = Category.Find(id);
-        thisCategory.Delete(id);
+        thisCategory.Delete();
         List<Category> allCategories = Category.GetAll();
         return View("Index", allCategories);
       }

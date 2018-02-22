@@ -181,5 +181,27 @@ namespace ToDoList.Tests
       //Assert
       Assert.AreEqual(0, result);
     }
+
+    [TestMethod]
+    public void Delete_RemovesOneItemFromDatabase_0()
+    {
+      //Arrange
+      DateTime firstDueDate = new DateTime (2018, 3, 1);
+      Item firstItem = new Item("Mow the lawn", firstDueDate, 1);
+      firstItem.Save();
+      DateTime secondDueDate = new DateTime (2018, 3, 1);
+      Item secondItem = new Item("Mow the lawn", secondDueDate, 1);
+      secondItem.Save();
+
+      //Act
+      int id = firstItem.GetId();
+      System.Console.WriteLine("id " + id);
+      firstItem.Delete();
+
+      int result = Item.GetAll().Count;
+
+      //Assert
+      Assert.AreEqual(1, result);
+    }
   }
 }

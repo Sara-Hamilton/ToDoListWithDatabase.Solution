@@ -52,6 +52,16 @@ namespace ToDoList.Controllers
         return RedirectToAction("Index");
       }
 
+      // I added this method outside of the tutorial
+      // This is not working
+      [HttpPost("/categories/{id}/delete")]
+      public ActionResult Delete(int id)
+      {
+        Category.DeleteOne(id);
+        // thisCategory.DeleteOne(id);
+        return View("Index");
+      }
+
       [HttpGet("/categories/{id}/view")]
       public ActionResult ViewItems(int id)
       {

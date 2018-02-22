@@ -93,5 +93,17 @@ namespace ToDoList.Controllers
           return RedirectToAction("Index");
         }
 
+        // I added this outside of the tutorial
+        // This doesn't work yet
+        [HttpPost("/items/{id}/delete")]
+        public ActionResult DeleteOne(int id)
+        {
+          Item thisItem = Item.Find(id);
+          string newDueDate = Request.Form["newduedate"];
+          DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
+          thisItem.Edit(Request.Form["newname"], parsedDueDate,  Int32.Parse(Request.Form["newcategoryId"]));
+          return RedirectToAction("Index");
+        }
+
     }
 }

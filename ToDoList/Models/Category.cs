@@ -124,7 +124,8 @@ namespace ToDoList.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"DELETE FROM categories;";
+      // cmd.CommandText = @"DELETE FROM categories;";
+      cmd.CommandText = @"DELETE FROM categories, items USING categories LEFT JOIN items on (categories.id = items.category_id);";
       cmd.ExecuteNonQuery();
       conn.Close();
       if (conn != null)

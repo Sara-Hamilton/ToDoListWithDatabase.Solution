@@ -27,7 +27,6 @@ namespace ToDoList.Controllers
         {
           List<Category> allCategories = Category.GetAll();
           return View(allCategories);
-          // return View();
         }
 
         [HttpPost("/items")]
@@ -35,6 +34,7 @@ namespace ToDoList.Controllers
         {
           string newDueDate = Request.Form["new-duedate"];
           DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
+          string newDescription = Request.Form["new-description"];
           Item newItem = new Item (Request.Form["new-description"], parsedDueDate, Int32.Parse(Request.Form["new-category"]));
           newItem.Save();
           List<Item> allItems = Item.GetAll();
@@ -51,7 +51,7 @@ namespace ToDoList.Controllers
         public ActionResult DeleteAll()
         {
           Item.DeleteAll();
-          return View();
+          return View("Index");
         }
 
         [HttpPost("/items/duedatesort")]

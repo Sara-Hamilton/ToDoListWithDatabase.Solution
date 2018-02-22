@@ -8,15 +8,15 @@ namespace ToDoList.Tests
   [TestClass]
   public class CategoryTest : IDisposable
   {
-    public void CategoryTests()
-    {
-      DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
-    }
-
     public void Dispose()
     {
       Item.DeleteAll();
       Category.DeleteAll();
+    }
+
+    public void CategoryTests()
+    {
+      DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
     }
 
     [TestMethod]
@@ -102,9 +102,45 @@ namespace ToDoList.Tests
 
       List<Item> testItemList = new List<Item> {firstItem, secondItem};
       List<Item> resultItemList = testCategory.GetItems();
-      
+
       //Assert
       CollectionAssert.AreEqual(testItemList, resultItemList);
     }
+
+    [TestMethod]
+    public void DeleteAll_RemovesAllCategoriesFromDatabase_0()
+    {
+      //Arrange
+      Category testCategory = new Category("Household chores");
+      testCategory.Save();
+
+      //Act
+      Category.DeleteAll();
+      int result = Category.GetAll().Count;
+
+      //Assert
+      Assert.AreEqual(0, result);
+    }
+
+    [TestMethod]
+    public void Delete_RemovesOneCategoryFromDatabase_0()
+    {
+      //Arrange
+      Category testCategory1 = new Category("Household chores");
+      testCategory1.Save();
+      Category testCategory2 = new Category("Do the dishes");
+      testCategory2.Save();
+
+      //Act
+      int id = testCategory1.GetId();
+      System.Console.WriteLine("id " +id);
+      testCategory1.Delete(id);
+
+      int result = Category.GetAll().Count;
+
+      //Assert
+      Assert.AreEqual(1, result);
+    }
+
   }
 }

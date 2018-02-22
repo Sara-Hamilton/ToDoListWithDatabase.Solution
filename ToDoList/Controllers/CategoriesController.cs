@@ -53,13 +53,13 @@ namespace ToDoList.Controllers
       }
 
       // I added this method outside of the tutorial
-      // This is not working
-      [HttpPost("/categories/{id}/delete")]
+      [HttpGet("/categories/{id}/delete")]
       public ActionResult Delete(int id)
       {
-        Category.DeleteOne(id);
-        // thisCategory.DeleteOne(id);
-        return View("Index");
+        Category thisCategory = Category.Find(id);
+        thisCategory.Delete(id);
+        List<Category> allCategories = Category.GetAll();
+        return View("Index", allCategories);
       }
 
       [HttpGet("/categories/{id}/view")]

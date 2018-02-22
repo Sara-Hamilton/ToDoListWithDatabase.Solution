@@ -157,12 +157,29 @@ namespace ToDoList.Tests
       DateTime secondDueDate = new DateTime (2018, 4, 1);
 
       //Act
-      testItem.Edit(secondDescription, secondDueDate);
+      testItem.Edit(secondDescription, secondDueDate, 1);
 
       string result = Item.Find(testItem.GetId()).GetDescription();
 
       //Assert
       Assert.AreEqual(secondDescription , result);
+    }
+
+    [TestMethod]
+    public void DeleteAll_RemovesAllItemsFromDatabase_0()
+    {
+      //Arrange
+      string firstDescription = "Walk the Dog";
+      DateTime newDueDate = new DateTime (2018, 3, 1);
+      Item testItem = new Item(firstDescription, newDueDate, 1);
+      testItem.Save();
+
+      //Act
+      Item.DeleteAll();
+      int result = Item.GetAll().Count;
+
+      //Assert
+      Assert.AreEqual(0, result);
     }
   }
 }

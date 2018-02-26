@@ -157,7 +157,7 @@ namespace ToDoList.Tests
       DateTime secondDueDate = new DateTime (2018, 4, 1);
 
       //Act
-      testItem.Edit(secondDescription, secondDueDate);
+      testItem.Edit(secondDescription, secondDueDate, false);
 
       string result = Item.Find(testItem.GetId()).GetDescription();
 

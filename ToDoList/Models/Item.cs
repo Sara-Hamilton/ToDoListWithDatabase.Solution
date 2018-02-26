@@ -10,12 +10,14 @@ namespace ToDoList.Models
     private int _id;
     private string _description;
     private DateTime _dueDate;
+    private bool _complete;
 
-    public Item(string Description, DateTime DueDate, int Id = 0)
+    public Item(string Description, DateTime DueDate, int Id = 0, bool Complete = false)
     {
       _id = Id;
       _description = Description;
       _dueDate = DueDate;
+      _complete = Complete;
     }
 
     public override bool Equals(System.Object otherItem)
@@ -30,7 +32,8 @@ namespace ToDoList.Models
         bool idEquality = (this.GetId() == newItem.GetId());
         bool descriptionEquality = (this.GetDescription() == newItem.GetDescription());
         bool dueDateEquality = (this.GetDueDate() == newItem.GetDueDate());
-        return (idEquality && descriptionEquality && dueDateEquality);
+        bool completeEquality = (this.GetComplete() == newItem.GetComplete());
+        return (idEquality && descriptionEquality && dueDateEquality && completeEquality);
       }
     }
 
@@ -60,6 +63,15 @@ namespace ToDoList.Models
       _dueDate = newDueDate;
     }
 
+    public bool GetComplete()
+    {
+      return _complete;
+    }
+    public void SetComplete(bool newComplete)
+    {
+      _complete = newComplete;
+    }
+
     public static List<Item> GetAll()
     {
       List<Item> allItems = new List<Item> {};
@@ -73,7 +85,8 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
-        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+        bool itemComplete = rdr.GetBoolean(3);
+        Item newItem = new Item(itemDescription, itemDueDate, itemId, itemComplete);
         allItems.Add(newItem);
       }
       conn.Close();
@@ -109,7 +122,7 @@ namespace ToDoList.Models
      var cmd = conn.CreateCommand() as MySqlCommand;
     //  cmd.CommandText = @"INSERT INTO `items` (`description`) VALUES (@ItemDescription);";
     // names in parentheses must match column names in database exactly
-    cmd.CommandText = @"INSERT INTO `items` (description, duedate) VALUES (@ItemDescription, @ItemDueDate);";
+    cmd.CommandText = @"INSERT INTO `items` (description, duedate, complete) VALUES (@ItemDescription, @ItemDueDate, @ItemComplete);";
 
      MySqlParameter description = new MySqlParameter();
      description.ParameterName = "@ItemDescription";
@@ -120,6 +133,11 @@ namespace ToDoList.Models
      dueDate.ParameterName = "@ItemDueDate";
      dueDate.Value = this._dueDate;
      cmd.Parameters.Add(dueDate);
+
+     MySqlParameter complete = new MySqlParameter();
+     complete.ParameterName = "@ItemComplete";
+     complete.Value = this._complete;
+     cmd.Parameters.Add(complete);
 
      cmd.ExecuteNonQuery();
      _id = (int) cmd.LastInsertedId;
@@ -149,15 +167,17 @@ namespace ToDoList.Models
      int itemId = 0;
      string itemDescription = "";
      DateTime itemDueDate = DateTime.Now;
+     bool itemComplete = false;
 
      while (rdr.Read())
      {
        itemId = rdr.GetInt32(0);
        itemDescription = rdr.GetString(1);
        itemDueDate = rdr.GetDateTime(2);
+       itemComplete = rdr.GetBoolean(3);
      }
 
-     Item foundItem= new Item(itemDescription, itemDueDate, itemId);
+     Item foundItem= new Item(itemDescription, itemDueDate, itemId, itemComplete);
 
       conn.Close();
       if (conn != null)
@@ -181,8 +201,9 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
+        bool itemComplete = rdr.GetBoolean(3);
 
-        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+        Item newItem = new Item(itemDescription, itemDueDate, itemId, itemComplete);
 
         sortedItems.Add(newItem);
       }
@@ -207,8 +228,9 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
+        bool itemComplete = rdr.GetBoolean(3);
 
-        Item newItem = new Item(itemDescription, itemDueDate, itemId);
+        Item newItem = new Item(itemDescription, itemDueDate, itemId, itemComplete);
 
         sortedItems.Add(newItem);
       }
@@ -220,12 +242,12 @@ namespace ToDoList.Models
       return sortedItems;
     }
 
-    public void Edit (string newDescription, DateTime newDuedate)
+    public void Edit (string newDescription, DateTime newDuedate, bool newComplete)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"UPDATE items SET description = @newDescription, duedate = @newDuedate WHERE id = @searchId;";
+      cmd.CommandText = @"UPDATE items SET description = @newDescription, duedate = @newDuedate, complete = @newComplete WHERE id = @searchId;";
 
       MySqlParameter searchId = new MySqlParameter();
       searchId.ParameterName = "@searchId";
@@ -242,9 +264,15 @@ namespace ToDoList.Models
       duedate.Value = newDuedate;
       cmd.Parameters.Add(duedate);
 
+      MySqlParameter complete = new MySqlParameter();
+      complete.ParameterName = "@newComplete";
+      complete.Value = newComplete;
+      cmd.Parameters.Add(complete);
+
       cmd.ExecuteNonQuery();
       _description = newDescription;
       _dueDate = newDuedate;
+      _complete = newComplete;
 
       conn.Close();
       if (conn != null)

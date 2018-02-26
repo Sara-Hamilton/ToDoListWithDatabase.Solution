@@ -87,7 +87,6 @@ namespace ToDoList.Tests
       Assert.AreEqual(testCategory, foundCategory);
     }
 
-    // This test is failing.  It is retrieving nothing.
     [TestMethod]
     public void GetItems_RetrievesAllItemsWithCategory_ItemList()
     {
@@ -98,14 +97,14 @@ namespace ToDoList.Tests
 
       //Act
       Item firstItem = new Item("Mow the lawn", newDueDate, testCategory.GetId());
-      firstItem.Save();
+      firstItem.Save(); //this adds the item to the items table
+      firstItem.AddCategory(testCategory); //this adds the item and category to the categories_items table
       Item secondItem = new Item("Do the dishes", newDueDate, testCategory.GetId());
       secondItem.Save();
+      secondItem.AddCategory(testCategory);
 
       List<Item> testItemList = new List<Item> {firstItem, secondItem};
       List<Item> resultItemList = testCategory.GetItems();
-      Console.WriteLine("test item list " + testItemList.Count);
-      Console.WriteLine("result item list " + resultItemList.Count);
 
       //Assert
       CollectionAssert.AreEqual(testItemList, resultItemList);

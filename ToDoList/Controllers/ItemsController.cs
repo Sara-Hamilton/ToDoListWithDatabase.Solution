@@ -39,11 +39,6 @@ namespace ToDoList.Controllers
           newItem.Save();
           List<Item> allItems = Item.GetAll();
 
-          // List<Category> allCategories = Category.GetAll();
-          // Dictionary<string, object> model = new Dictionary<string, object>();
-          // model.Add("items", allItems);
-          // model.Add("categories", allCategories);
-          // return View("Index", model);
           return View("Index", allItems);
         }
 
@@ -70,28 +65,28 @@ namespace ToDoList.Controllers
           return View("Index", allItems);
         }
 
-        [HttpGet("/items/{id}/update")]
-        public ActionResult UpdateForm(int id)
-        {
-          Item thisItem = Item.Find(id);
-          Category thisCategory = Category.Find(thisItem.GetCategoryId());
-          List<Category> allCategories = Category.GetAll();
-          Dictionary<string, object> taskDetails = new Dictionary <string, object>();
-          taskDetails.Add("item", thisItem);
-          taskDetails.Add("categories", allCategories);
-
-          return View(taskDetails);
-        }
-
-        [HttpPost("/items/{id}/update")]
-        public ActionResult Update(int id)
-        {
-          Item thisItem = Item.Find(id);
-          string newDueDate = Request.Form["newduedate"];
-          DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
-          thisItem.Edit(Request.Form["newname"], parsedDueDate,  Int32.Parse(Request.Form["newcategoryId"]));
-          return RedirectToAction("Index");
-        }
+        // [HttpGet("/items/{id}/update")]
+        // public ActionResult UpdateForm(int id)
+        // {
+        //   Item thisItem = Item.Find(id);
+        //   Category thisCategory = Category.Find(thisItem.GetCategoryId());
+        //   List<Category> allCategories = Category.GetAll();
+        //   Dictionary<string, object> taskDetails = new Dictionary <string, object>();
+        //   taskDetails.Add("item", thisItem);
+        //   taskDetails.Add("categories", allCategories);
+        //
+        //   return View(taskDetails);
+        // }
+        //
+        // [HttpPost("/items/{id}/update")]
+        // public ActionResult Update(int id)
+        // {
+        //   Item thisItem = Item.Find(id);
+        //   string newDueDate = Request.Form["newduedate"];
+        //   DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
+        //   thisItem.Edit(Request.Form["newname"], parsedDueDate,  Int32.Parse(Request.Form["newcategoryId"]));
+        //   return RedirectToAction("Index");
+        // }
 
         // I added this outside of the tutorial
         [HttpGet("/items/{id}/delete")]

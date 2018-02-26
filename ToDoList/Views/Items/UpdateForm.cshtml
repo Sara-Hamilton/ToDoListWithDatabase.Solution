@@ -9,7 +9,7 @@
     <select name="newcategoryId">
       @foreach(var category in @Model["categories"])
       {
-        <option value=@category.GetId() if()>@category.GetName()</option>
+        <option value=@category.GetId()>@category.GetName()</option>
       }
     </select>
 

@@ -141,7 +141,7 @@ namespace ToDoList.Models
       var cmd = conn.CreateCommand() as MySqlCommand;
       cmd.CommandText = @"DELETE FROM categories WHERE id = @category_id; DELETE FROM items WHERE category_id = @category_id;";
 
-      // The following code is needed if id is fed in as a parameter named idToDelete
+      // The following code is needed if id is fed in as a parameter named idTo
       // MySqlParameter categoryId = new MySqlParameter();
       // categoryId.ParameterName = "@category_id";
       // categoryId.Value = idToDelete;
@@ -179,8 +179,7 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
-        int itemCategoryId = rdr.GetInt32(3);
-        Item newItem = new Item(itemDescription, itemDueDate, itemCategoryId, itemId);
+        Item newItem = new Item(itemDescription, itemDueDate, itemId);
         allCategoryItems.Add(newItem);
       }
       conn.Close();

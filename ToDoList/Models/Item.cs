@@ -10,14 +10,12 @@ namespace ToDoList.Models
     private int _id;
     private string _description;
     private DateTime _dueDate;
-    private int _categoryId;
 
-    public Item(string Description, DateTime DueDate, int categoryId, int Id = 0)
+    public Item(string Description, DateTime DueDate, int Id = 0)
     {
       _id = Id;
       _description = Description;
       _dueDate = DueDate;
-      _categoryId = categoryId;
     }
 
     public override bool Equals(System.Object otherItem)
@@ -32,8 +30,7 @@ namespace ToDoList.Models
         bool idEquality = (this.GetId() == newItem.GetId());
         bool descriptionEquality = (this.GetDescription() == newItem.GetDescription());
         bool dueDateEquality = (this.GetDueDate() == newItem.GetDueDate());
-        bool categoryEquality = this.GetCategoryId() == newItem.GetCategoryId();
-        return (idEquality && descriptionEquality && dueDateEquality && categoryEquality);
+        return (idEquality && descriptionEquality && dueDateEquality);
       }
     }
 
@@ -53,10 +50,6 @@ namespace ToDoList.Models
     public void SetDescription(string newDescription)
     {
       _description = newDescription;
-    }
-    public int GetCategoryId()
-    {
-      return _categoryId;
     }
     public DateTime GetDueDate()
     {
@@ -80,8 +73,7 @@ namespace ToDoList.Models
         int itemId = rdr.GetInt32(0);
         string itemDescription = rdr.GetString(1);
         DateTime itemDueDate = rdr.GetDateTime(2);
-        int itemCategoryId = rdr.GetInt32(3);
-        Item newItem = new Item(itemDescription, itemDueDate, itemCategoryId, itemId);
+        Item newItem = new Item(itemDescription, itemDueDate, itemId);
         allItems.Add(newItem);
       }
       conn.Close();
@@ -117,7 +109,7 @@ namespace ToDoList.Models
      var cmd = conn.CreateCommand() as MySqlCommand;
     //  cmd.CommandText = @"INSERT INTO `items` (`description`) VALUES (@ItemDescription);";
     // names in parentheses must match column names in database exactly
-    cmd.CommandText = @"INSERT INTO `items` (description, duedate, category_id) VALUES (@ItemDescription, @ItemDueDate, @ItemCategoryId);";
+    cmd.CommandText = @"INSERT INTO `items` (description, duedate) VALUES (@ItemDescription, @ItemDueDate);";
 
      MySqlParameter description = new MySqlParameter();
      description.ParameterName = "@ItemDescription";
@@ -128,11 +120,6 @@ namespace ToDoList.Models
      dueDate.ParameterName = "@ItemDueDate";
      dueDate.Value = this._dueDate;
      cmd.Parameters.Add(dueDate);
-
-     MySqlParameter categoryId = new MySqlParameter();
-     categoryId.ParameterName = "@ItemCategoryId";
-     categoryId.Value = this._categoryId;
-     cmd.Parameters.Add(categoryId);
 
      cmd.ExecuteNonQuery();
      _id = (int) cmd.LastInsertedId;
@@ -162,17 +149,15 @@ namespace ToDoList.Models
      int itemId = 0;
      string itemDescription = "";
      DateTime itemDueDate = DateTime.Now;
-     int itemCategoryId = 0;
 
      while (rdr.Read())
      {
        itemId = rdr.GetInt32(0);
        itemDescription = rdr.GetString(1);
        itemDueDate = rdr.GetDateTime(2);
-       itemCategoryId = rdr.GetInt32(3);
      }
 
-     Item foundItem= new Item(itemDescription, itemDueDate, itemCategoryId, itemId);
+     Item foundItem= new Item(itemDescription, itemDueDate, itemId);
 
       conn.Close();
       if (conn != null)
@@ -182,47 +167,6 @@ namespace ToDoList.Models
 
      return foundItem;
     }
-
-    // this method generates the following error: NotSupportedException: Parameter type MySqlParameter (DbType: String) not currently supported. Value: MySql.Data.MySqlClient.MySqlParameter
-    // public static List<Item> SortByDueDate()
-    // {
-    //   List<Item> sortedItems = new List<Item>{};
-    //   MySqlConnection conn = DB.Connection();
-    //   conn.Open();
-    //   MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-    //   cmd.CommandText = @"SELECT * FROM items ORDER BY (@ItemDueDate) ACS;";
-    //
-    //   //unsure about this
-    //   // MySqlParameter thisDuedate = new MySqlParameter();
-    //   // thisDuedate.ParameterName = "@thisDuedate";
-    //   // thisDuedate.Value = dueDate;
-    //   // cmd.Parameters.Add(thisDuedate);
-    //
-    //   MySqlParameter dueDate = new MySqlParameter();
-    //   dueDate.ParameterName = "@ItemDueDate";
-    //   // the following line is probably incorrect
-    //   dueDate.Value = dueDate;
-    //   Console.WriteLine(dueDate);
-    //   cmd.Parameters.Add(dueDate);
-    //
-    //   MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
-    //   while (rdr.Read())
-    //   {
-    //     int itemId = rdr.GetInt32(0);
-    //     string itemDescription = rdr.GetString(1);
-    //     DateTime itemDueDate = rdr.GetDateTime(2);
-    //
-    //     Item newItem = new Item(itemDescription, itemDueDate, itemId);
-    //
-    //     sortedItems.Add(newItem);
-    //   }
-    //   conn.Close();
-    //   if (conn != null)
-    //   {
-    //     conn.Dispose();
-    //   }
-    //   return sortedItems;
-    // }
 
     public static List<Item> SortByDueDate()
     {
@@ -276,12 +220,12 @@ namespace ToDoList.Models
       return sortedItems;
     }
 
-    public void Edit (string newDescription, DateTime newDuedate, int newCategoryId)
+    public void Edit (string newDescription, DateTime newDuedate)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"UPDATE items SET description = @newDescription, category_id = @newCategoryId, duedate = @newDuedate WHERE id = @searchId;";
+      cmd.CommandText = @"UPDATE items SET description = @newDescription, duedate = @newDuedate WHERE id = @searchId;";
 
       MySqlParameter searchId = new MySqlParameter();
       searchId.ParameterName = "@searchId";
@@ -293,11 +237,6 @@ namespace ToDoList.Models
       description.Value = newDescription;
       cmd.Parameters.Add(description);
 
-      MySqlParameter categoryId = new MySqlParameter();
-      categoryId.ParameterName = "@newCategoryId";
-      categoryId.Value = newCategoryId;
-      cmd.Parameters.Add(categoryId);
-
       MySqlParameter duedate = new MySqlParameter();
       duedate.ParameterName = "@newDuedate";
       duedate.Value = newDuedate;
@@ -305,7 +244,6 @@ namespace ToDoList.Models
 
       cmd.ExecuteNonQuery();
       _description = newDescription;
-      _categoryId = newCategoryId;
       _dueDate = newDuedate;
 
       conn.Close();
@@ -335,6 +273,17 @@ namespace ToDoList.Models
           conn.Dispose();
       }
     }
+
+    public void AddCategory(Category newCategory)
+    {
+
+    }
+
+    public List<Category> GetCategories()
+   {
+       List<Category> categories = new List<Category> {};
+       return categories;
+   }
 
   }
 }

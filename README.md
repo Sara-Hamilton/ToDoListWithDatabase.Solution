@@ -27,10 +27,13 @@ CREATE TABLE `items` (`id` int(11) NOT NULL AUTO_INCREMENT, `description` varcha
 
 #### _many-to-many branch_
 * Many to Many relationship many categories to many items
+```
+CREATE TABLE `categories` ( `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, `name` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`), UNIQUE KEY `id` (`id`)) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
 
-CREATE TABLE `todo_test`.`categories_items` ( `id` INT NOT NULL AUTO_INCREMENT , `category_id` INT NOT NULL , `item_id` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `items` (`id` int(11) NOT NULL AUTO_INCREMENT, `description` varchar(255) DEFAULT NULL, `duedate` date DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
 
-
+CREATE TABLE `categories_items` ( `id` INT NOT NULL AUTO_INCREMENT , `category_id` INT NOT NULL , `item_id` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+```
 
   ## Setup/Installation Requirements
 

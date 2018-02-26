@@ -19,6 +19,7 @@ namespace ToDoList.Tests
       DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
     }
 
+    // This test is failing.  It looks like it is reading the actual database and not the test database
     [TestMethod]
      public void GetAll_CategoriesEmptyAtFirst_0()
      {
@@ -86,6 +87,7 @@ namespace ToDoList.Tests
       Assert.AreEqual(testCategory, foundCategory);
     }
 
+    // This test is failing.  It is retrieving nothing.
     [TestMethod]
     public void GetItems_RetrievesAllItemsWithCategory_ItemList()
     {
@@ -102,6 +104,8 @@ namespace ToDoList.Tests
 
       List<Item> testItemList = new List<Item> {firstItem, secondItem};
       List<Item> resultItemList = testCategory.GetItems();
+      Console.WriteLine("test item list " + testItemList.Count);
+      Console.WriteLine("result item list " + resultItemList.Count);
 
       //Assert
       CollectionAssert.AreEqual(testItemList, resultItemList);
@@ -123,23 +127,73 @@ namespace ToDoList.Tests
     }
 
     [TestMethod]
-    public void Delete_RemovesOneCategoryFromDatabase_0()
+    public void Delete_DeletesCategoryAssociationsFromDatabase_CategoryList()
     {
       //Arrange
-      Category testCategory1 = new Category("Household chores");
-      testCategory1.Save();
-      Category testCategory2 = new Category("Do the dishes");
-      testCategory2.Save();
+      DateTime testDueDate = new DateTime (2018, 3, 1);
+      Item testItem = new Item("Mow the lawn", testDueDate);
+      testItem.Save();
+
+      string testName = "Home stuff";
+      Category testCategory = new Category(testName);
+      testCategory.Save();
 
       //Act
-      int id = testCategory1.GetId();
-      System.Console.WriteLine("id " +id);
-      testCategory1.Delete();
+      testCategory.AddItem(testItem);
+      testCategory.Delete();
 
-      int result = Category.GetAll().Count;
+      List<Category> resultItemCategories = testItem.GetCategories();
+      List<Category> testItemCategories = new List<Category> {};
 
       //Assert
-      Assert.AreEqual(1, result);
+      CollectionAssert.AreEqual(testItemCategories, resultItemCategories);
+    }
+
+    // This test method is replaced by the test method above for many-to-many relationships
+    // [TestMethod]
+    // public void Delete_RemovesOneCategoryFromDatabase_0()
+    // {
+    //   //Arrange
+    //   Category testCategory1 = new Category("Household chores");
+    //   testCategory1.Save();
+    //   Category testCategory2 = new Category("Do the dishes");
+    //   testCategory2.Save();
+    //
+    //   //Act
+    //   int id = testCategory1.GetId();
+    //   System.Console.WriteLine("id " +id);
+    //   testCategory1.Delete();
+    //
+    //   int result = Category.GetAll().Count;
+    //
+    //   //Assert
+    //   Assert.AreEqual(1, result);
+    // }
+
+    [TestMethod]
+    public void Test_AddItem_AddsItemToCategory()
+    {
+      //Arrange
+      Category testCategory = new Category("Household chores");
+      testCategory.Save();
+
+      DateTime testDueDate = new DateTime (2018, 3, 1);
+      Item testItem = new Item("Mow the lawn", testDueDate);
+      testItem.Save();
+
+      DateTime testDueDate2 = new DateTime (2018, 5, 6);
+      Item testItem2 = new Item("Water the garden", testDueDate2);
+      testItem2.Save();
+
+      //Act
+      testCategory.AddItem(testItem);
+      testCategory.AddItem(testItem2);
+
+      List<Item> result = testCategory.GetItems();
+      List<Item> testList = new List<Item>{testItem, testItem2};
+
+      //Assert
+      CollectionAssert.AreEqual(testList, result);
     }
 
   }

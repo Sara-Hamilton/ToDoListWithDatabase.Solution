@@ -183,26 +183,50 @@ namespace ToDoList.Tests
     }
 
     [TestMethod]
-    public void Delete_RemovesOneItemFromDatabase_0()
+    public void Delete_DeletesItemAssociationsFromDatabase_ItemList()
     {
       //Arrange
+      Category testCategory = new Category("Home stuff");
+      testCategory.Save();
+
+      string testDescription = "Mow the lawn";
       DateTime firstDueDate = new DateTime (2018, 3, 1);
-      Item firstItem = new Item("Mow the lawn", firstDueDate);
-      firstItem.Save();
-      DateTime secondDueDate = new DateTime (2018, 3, 1);
-      Item secondItem = new Item("Mow the lawn", secondDueDate);
-      secondItem.Save();
+      Item testItem = new Item(testDescription, firstDueDate);
+      testItem.Save();
 
       //Act
-      int id = firstItem.GetId();
-      System.Console.WriteLine("id " + id);
-      firstItem.Delete();
+      testItem.AddCategory(testCategory);
+      testItem.Delete();
 
-      int result = Item.GetAll().Count;
+      List<Item> resultCategoryItems = testCategory.GetItems();
+      List<Item> testCategoryItems = new List<Item> {};
 
       //Assert
-      Assert.AreEqual(1, result);
+      CollectionAssert.AreEqual(testCategoryItems, resultCategoryItems);
     }
+
+    //This test method is replaced by the test method above for the many-to-many relationship setup
+    // [TestMethod]
+    // public void Delete_RemovesOneItemFromDatabase_0()
+    // {
+    //   //Arrange
+    //   DateTime firstDueDate = new DateTime (2018, 3, 1);
+    //   Item firstItem = new Item("Mow the lawn", firstDueDate);
+    //   firstItem.Save();
+    //   DateTime secondDueDate = new DateTime (2018, 3, 1);
+    //   Item secondItem = new Item("Mow the lawn", secondDueDate);
+    //   secondItem.Save();
+    //
+    //   //Act
+    //   int id = firstItem.GetId();
+    //   System.Console.WriteLine("id " + id);
+    //   firstItem.Delete();
+    //
+    //   int result = Item.GetAll().Count;
+    //
+    //   //Assert
+    //   Assert.AreEqual(1, result);
+    // }
 
     [TestMethod]
     public void AddCategory_AddsCategoryToItem_CategoryList()

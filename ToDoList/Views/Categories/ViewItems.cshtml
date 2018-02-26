@@ -5,7 +5,7 @@
 <ul>
 @foreach(var item in Model)
 {
-  <li>Task: @item.GetDescription() Category: @item.GetCategoryId() Due date: @item.GetDueDate().ToShortDateString() | <a href="/items/@item.GetId()/update">Edit</a></li>
+  <li>Task: @item.GetDescription() Category: @item.GetCategoryId() Due date: @item.GetDueDate().ToShortDateString() @item.GetComplete() | <a href="/items/@item.GetId()/update">Edit</a></li>
   }
 </ul>
 <p><a href="/items/new">Add another item.</a></p>

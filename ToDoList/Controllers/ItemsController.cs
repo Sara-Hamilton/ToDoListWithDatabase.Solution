@@ -65,28 +65,28 @@ namespace ToDoList.Controllers
           return View("Index", allItems);
         }
 
-        // [HttpGet("/items/{id}/update")]
-        // public ActionResult UpdateForm(int id)
-        // {
-        //   Item thisItem = Item.Find(id);
-        //   Category thisCategory = Category.Find(thisItem.GetCategoryId());
-        //   List<Category> allCategories = Category.GetAll();
-        //   Dictionary<string, object> taskDetails = new Dictionary <string, object>();
-        //   taskDetails.Add("item", thisItem);
-        //   taskDetails.Add("categories", allCategories);
-        //
-        //   return View(taskDetails);
-        // }
-        //
-        // [HttpPost("/items/{id}/update")]
-        // public ActionResult Update(int id)
-        // {
-        //   Item thisItem = Item.Find(id);
-        //   string newDueDate = Request.Form["newduedate"];
-        //   DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
-        //   thisItem.Edit(Request.Form["newname"], parsedDueDate,  Int32.Parse(Request.Form["newcategoryId"]));
-        //   return RedirectToAction("Index");
-        // }
+        [HttpGet("/items/{id}/update")]
+        public ActionResult UpdateForm(int id)
+        {
+          Item thisItem = Item.Find(id);
+          // Category thisCategory = Category.Find(thisItem.GetCategoryId());
+          List<Category> allCategories = Category.GetAll();
+          Dictionary<string, object> taskDetails = new Dictionary <string, object>();
+          taskDetails.Add("item", thisItem);
+          taskDetails.Add("categories", allCategories);
+
+          return View(taskDetails);
+        }
+
+        [HttpPost("/items/{id}/update")]
+        public ActionResult Update(int id)
+        {
+          Item thisItem = Item.Find(id);
+          string newDueDate = Request.Form["newduedate"];
+          DateTime parsedDueDate = Convert.ToDateTime(newDueDate);
+          thisItem.Edit(Request.Form["newname"], parsedDueDate,  Int32.Parse(Request.Form["newcategoryId"]), bool.Parse(Request.Form["newcomplete"]));
+          return RedirectToAction("Index");
+        }
 
         // I added this outside of the tutorial
         [HttpGet("/items/{id}/delete")]

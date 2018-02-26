@@ -242,7 +242,7 @@ namespace ToDoList.Models
       return sortedItems;
     }
 
-    public void Edit (string newDescription, DateTime newDuedate, bool newComplete)
+    public void Edit (string newDescription, DateTime newDuedate, int newId, bool newComplete)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();

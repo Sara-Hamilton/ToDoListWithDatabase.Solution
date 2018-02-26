@@ -15,6 +15,10 @@
 
     <label for="duedate">Due Date:</label>
     <input type="date" name="newduedate" value="@Model["item"].GetDueDate()">
+
+    <label for="complete">Complete:</label>
+    <input type="radio" name="newcomplete" value="true">True
+    <input type="radio" name="newcomplete" value="false">False
     <button type="submit">Edit</button>
 </form>
 <h4><a href="/items">Return home</a></h4>

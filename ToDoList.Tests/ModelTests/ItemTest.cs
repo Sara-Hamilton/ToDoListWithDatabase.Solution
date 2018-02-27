@@ -155,9 +155,10 @@ namespace ToDoList.Tests
       testItem.Save();
       string secondDescription = "Mow the lawn";
       DateTime secondDueDate = new DateTime (2018, 4, 1);
+      int testItemId = testItem.GetId();
 
       //Act
-      testItem.Edit(secondDescription, secondDueDate, false);
+      testItem.Edit(secondDescription, secondDueDate, testItemId,false);
 
       string result = Item.Find(testItem.GetId()).GetDescription();
 

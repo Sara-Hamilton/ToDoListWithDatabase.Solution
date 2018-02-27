@@ -8,16 +8,21 @@
   <button type="submit" name="button">Sort By Date Created</button>
 </form>
 
-<ul>
-@foreach(var item in Model)
+<h1>To Do List</h1>
+<hr />
+<h2>Items:</h2>
+@if (Model.Count != 0)
 {
-  <li>Task: @item.GetDescription()  Due date: @item.GetDueDate().ToShortDateString() Completed @item.GetComplete()| <a href="/items/@item.GetId()/update">Edit</a> | <a href="/items/@item.GetId()/delete">Delete</a></li>
+  <ul>
+  @foreach(var item in Model)
+  {
+    <li>Task: @item.GetDescription()  Due date: @item.GetDueDate().ToShortDateString() Completed @item.GetComplete()| <a href="/items/@item.GetId()/update">Edit</a> | <a href="/items/@item.GetId()/delete">Delete</a></li>
+  }
+  </ul>
 }
-</ul>
 
 <p><a href="/items/new">Add another item.</a></p>
-<p><a href="/categories/new">Add another category.</a></p>
-<p><a href="/categories">Go to categories list.</a></p>
+<p><a href="/">Return Home</a></p>
 
 <form action="/items/delete" method="post">
   <button type="submit" name="button">Clear All Items</button>

@@ -6,7 +6,7 @@ using ToDoList.Models;
 namespace ToDoList.Tests
 {
   [TestClass]
-  public class CategoryTest : IDisposable
+  public class CategoryTests : IDisposable
   {
     public void Dispose()
     {
@@ -14,7 +14,7 @@ namespace ToDoList.Tests
       Category.DeleteAll();
     }
 
-    public void CategoryTests()
+    public CategoryTests()
     {
       DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
     }

@@ -25,7 +25,8 @@ namespace ToDoList.Models
        else
        {
          Category newCategory = (Category) otherCategory;
-         return this.GetId().Equals(newCategory.GetId());
+         // return this.GetId().Equals(newCategory.GetId());
+         return _id == newCategory._id && _name == newCategory._name;
        }
      }
 
@@ -52,10 +53,12 @@ namespace ToDoList.Models
        var cmd = conn.CreateCommand() as MySqlCommand;
        cmd.CommandText = @"INSERT INTO categories (name) VALUES (@name);";
 
-       MySqlParameter name = new MySqlParameter();
-       name.ParameterName = "@name";
-       name.Value = this._name;
-       cmd.Parameters.Add(name);
+       // MySqlParameter name = new MySqlParameter();
+       // name.ParameterName = "@name";
+       // name.Value = this._name;
+       // cmd.Parameters.Add(name);
+
+       cmd.Parameters.AddWithValue("@name", _name);
 
        cmd.ExecuteNonQuery();
        _id = (int) cmd.LastInsertedId;
@@ -96,10 +99,12 @@ namespace ToDoList.Models
       var cmd = conn.CreateCommand() as MySqlCommand;
       cmd.CommandText = @"SELECT * FROM categories WHERE id = (@searchId);";
 
-      MySqlParameter searchId = new MySqlParameter();
-      searchId.ParameterName = "@searchId";
-      searchId.Value = id;
-      cmd.Parameters.Add(searchId);
+      // MySqlParameter searchId = new MySqlParameter();
+      // searchId.ParameterName = "@searchId";
+      // searchId.Value = id;
+      // cmd.Parameters.Add(searchId);
+
+      cmd.Parameters.AddWithValue("@searchId", _id);
 
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       int CategoryId = 0;
@@ -140,9 +145,11 @@ namespace ToDoList.Models
       conn.Open();
       MySqlCommand cmd = new MySqlCommand("DELETE FROM categories WHERE id = @CategoryId; DELETE FROM categories_items WHERE category_id = @CategoryId;", conn);
 
-      MySqlParameter categoryIdParameter = new MySqlParameter();
-      categoryIdParameter.ParameterName = "@CategoryId";
-      categoryIdParameter.Value = this.GetId();
+      // MySqlParameter categoryIdParameter = new MySqlParameter();
+      // categoryIdParameter.ParameterName = "@CategoryId";
+      // categoryIdParameter.Value = this.GetId();
+
+      cmd.Parameters.AddWithValue("@CategoryId", _categoryId);
 
       cmd.Parameters.Add(categoryIdParameter);
       cmd.ExecuteNonQuery();
@@ -215,10 +222,12 @@ namespace ToDoList.Models
           JOIN items ON (categories_items.item_id = items.id)
           WHERE categories.id = @CategoryId;";
 
-      MySqlParameter categoryIdParameter = new MySqlParameter();
-      categoryIdParameter.ParameterName = "@CategoryId";
-      categoryIdParameter.Value = _id;
-      cmd.Parameters.Add(categoryIdParameter);
+      // MySqlParameter categoryIdParameter = new MySqlParameter();
+      // categoryIdParameter.ParameterName = "@CategoryId";
+      // categoryIdParameter.Value = _id;
+      // cmd.Parameters.Add(categoryIdParameter);
+
+      cmd.Parameters.AddWithValue("@CategoryId", _categoryId);
 
       MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
       List<Item> items = new List<Item>{};
@@ -246,15 +255,19 @@ namespace ToDoList.Models
       var cmd = conn.CreateCommand() as MySqlCommand;
       cmd.CommandText = @"UPDATE categories SET name = @newName WHERE id = @searchId;";
 
-      MySqlParameter searchId = new MySqlParameter();
-      searchId.ParameterName = "@searchId";
-      searchId.Value = _id;
-      cmd.Parameters.Add(searchId);
+      // MySqlParameter searchId = new MySqlParameter();
+      // searchId.ParameterName = "@searchId";
+      // searchId.Value = _id;
+      // cmd.Parameters.Add(searchId);
 
-      MySqlParameter name = new MySqlParameter();
-      name.ParameterName = "@newName";
-      name.Value = newName;
-      cmd.Parameters.Add(name);
+      cmd.Parameters.AddWithValue("@searchId", _id);
+
+      // MySqlParameter name = new MySqlParameter();
+      // name.ParameterName = "@newName";
+      // name.Value = newName;
+      // cmd.Parameters.Add(name);
+
+      cmd.Parameters.AddWithValue("@newName", newName);
 
       cmd.ExecuteNonQuery();
       _name = newName;
@@ -273,15 +286,19 @@ namespace ToDoList.Models
         var cmd = conn.CreateCommand() as MySqlCommand;
         cmd.CommandText = @"INSERT INTO categories_items (category_id, item_id) VALUES (@CategoryId, @ItemId);";
 
-        MySqlParameter category_id = new MySqlParameter();
-        category_id.ParameterName = "@CategoryId";
-        category_id.Value = _id;
-        cmd.Parameters.Add(category_id);
+        // MySqlParameter category_id = new MySqlParameter();
+        // category_id.ParameterName = "@CategoryId";
+        // category_id.Value = _id;
+        // cmd.Parameters.Add(category_id);
 
-        MySqlParameter item_id = new MySqlParameter();
-        item_id.ParameterName = "@ItemId";
-        item_id.Value = newItem.GetId();
-        cmd.Parameters.Add(item_id);
+        cmd.Parameters.AddWithValue("@CategoryId", _id);
+
+        // MySqlParameter item_id = new MySqlParameter();
+        // item_id.ParameterName = "@ItemId";
+        // item_id.Value = newItem.GetId();
+        // cmd.Parameters.Add(item_id);
+
+        cmd.Parameters.AddWithValue("@ItemId", newItem.GetId();
 
         cmd.ExecuteNonQuery();
         conn.Close();

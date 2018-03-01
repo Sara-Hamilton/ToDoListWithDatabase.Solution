@@ -1,10 +1,17 @@
-<h1>To Do List</h1>
-<hr />
-<h2>Edit Task: @Model["item"].GetDescription()</h2>
-<form action="/items/@Model["item"].GetId()/update" method="post">
+@{
+  Layout = "_Layout";
+}
+
+@* <h1>To Do List</h1>
+<hr /> *@
+<h2>Edit Item: @Model["item"].GetDescription()</h2>
+<form  class="form-inline" action="/items/@Model["item"].GetId()/update" method="post">
+  <div class=form-group>
     <label for="name">Name:</label>
     <input type="text" name="newname" value="@Model["item"].GetDescription()">
+  </div>
 
+  <div class=form-group>
     <label for="newcategoryId">Category:</label>
     <select name="newcategoryId">
       @foreach(var category in @Model["categories"])
@@ -12,13 +19,18 @@
         <option value=@category.GetId()>@category.GetName()</option>
       }
     </select>
+  </div>
 
+  <div class=form-group>
     <label for="duedate">Due Date:</label>
     <input type="date" name="newduedate" value="@Model["item"].GetDueDate()">
+  </div>
 
+  <div class=form-group>
     <label for="complete">Complete:</label>
     <input type="radio" name="newcomplete" value="true">True
     <input type="radio" name="newcomplete" value="false">False
-    <button type="submit">Edit</button>
+  </div>
+    <button type="submit" class="btn btn-default">Edit</button>
 </form>
-<h4><a href="/items">Return home</a></h4>
+@* <h4><a href="/items">Return home</a></h4> *@

@@ -1,8 +1,13 @@
-<h1>To Do List</h1>
-<h2>Add new category</h2>
-<form action="/categories" method="post">
-  <label for="new-name">Category name:</label>
-  <input id="new-name" name="new-name" type="text">
-  <button type="submit">Submit</button>
+@{
+  Layout = "_Layout";
+}
+
+<h2>Add a new category</h2>
+<form class="form-inline" action="/categories" method="post">
+  <div class="form-group">
+    <label for="new-name">Category name:</label>
+    <input id="new-name" name="new-name" type="text">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
 </form>
-<h4><a href="/">Return home</a></h4>
+@* <h4><a href="/">Return home</a></h4> *@

@@ -1,29 +1,74 @@
-<h1>To Do List</h1>
+@{
+  Layout = "_Layout";
+}
 
-<form action="/items/duedatesort" method="post">
-  <button type="submit" name="button">Sort By Due Date</button>
-</form>
 
-<form action="/items/idsort" method="post">
-  <button type="submit" name="button">Sort By Date Created</button>
-</form>
+<div class="row">
+  <div class="col-sm-2">
+    <form action="/items/duedatesort" method="post">
+      <button type="submit" name="button" class="btn btn-default">Sort By Due Date</button>
+    </form>
+  </div>
 
-<h1>To Do List</h1>
+  <div class="col-sm-2">
+    <form action="/items/idsort" method="post">
+      <button type="submit" name="button" class="btn btn-default">Sort By Date Created</button>
+    </form>
+  </div>
+
+  <div class="col-sm-6">
+  </div>
+
+  <div class="col-sm-2">
+    <form action="/items/delete" method="post">
+      <button type="submit" name="button" class="btn btn-default">Clear All Items</button>
+    </form>
+  </div>
+
+</div>
+
 <hr />
 <h2>Items:</h2>
 @if (Model.Count != 0)
 {
-  <ul>
+  /* <ul>
   @foreach(var item in Model)
   {
     <li>Task: <a href='/items/@item.GetId()'> @item.GetDescription()</a>  Due date: @item.GetDueDate().ToShortDateString() Completed @item.GetComplete()| <a href="/items/@item.GetId()/update">Edit</a> | <a href="/items/@item.GetId()/delete">Delete</a></li>
   }
-  </ul>
+  </ul> */
+
+  <div class="well">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Due Date</th>
+          <th>Completed</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      <thead>
+      <tbody>
+
+  @foreach(var item in Model)
+  {
+    <tr>
+      <td class="col-sm-3"><a href='/items/@item.GetId()'> @item.GetDescription()</a></td>
+      <td class="col-sm-3">@item.GetDueDate().ToShortDateString()</td>
+      <td class="col-sm-3">@item.GetComplete()</td>
+      <td class="col-sm-3"><a href="/items/@item.GetId()/update" class="btn btn-default" role="button">Edit this item</a></td>
+      <td class="col-sm-3"><a href="/items/@item.GetId()/delete" class="btn btn-default" role="button">Delete this item</a></td>
+    </tr>
+  }
+      </tbody>
+    </table>
+  </div>
 }
 
-<p><a href="/items/new">Add another item.</a></p>
+@* <p><a href="/items/new">Add another item.</a></p>
 <p><a href="/">Return Home</a></p>
 
 <form action="/items/delete" method="post">
   <button type="submit" name="button">Clear All Items</button>
-</form>
+</form> *@
